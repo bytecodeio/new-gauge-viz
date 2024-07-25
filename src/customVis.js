@@ -270,8 +270,11 @@ console.log(queryResponse, "queryResponse")
          .abso {
             position: absolute;
             top: 208px;
-            right: 327px;
+            right: calc(50% - 400px);
+            display:${config.side ? "block" : "none"}
+
         }
+
         foreignObject{
           overflow: visible;
         }
