@@ -4,7 +4,7 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-
+import * as $ from "jquery";
 
 
 looker.plugins.visualizations.add({
@@ -99,12 +99,24 @@ looker.plugins.visualizations.add({
                   textSize: {
                   type: "string",
                    label: "Text Size",
-                   default: "",
+                   default: "50px",
                    display: "text",
-                   placeholder: "40px",
+                   placeholder: "50px",
                    section: "Style",
                    order: 6,
                  },
+
+
+                 textSize2:{
+                 type: "string",
+                  label: "Text Size 2",
+                  default: "30px",
+                  display: "text",
+                  placeholder: "30px",
+                  section: "Style",
+                  order: 7,
+                },
+
 
 
 
@@ -152,6 +164,37 @@ looker.plugins.visualizations.add({
                   section: "Values",
                 },
 
+                side: {
+                  type: "boolean",
+                  label: "Show Right Side Text",
+                  default: false,
+                  order: 7,
+                  section: "Values",
+                },
+
+                rightValue: {
+                  label: "Choose Right Value",
+                  type: "string",
+                  display: "select",
+                  default: "",
+                  values: fieldOptions,
+
+                  order: 8,
+                  section: "Values",
+                },
+
+                rightLabel: {
+                  label: "Choose Right Label",
+                  type: "string",
+                  display: "select",
+                  default: "",
+                  values: fieldOptions2,
+
+                  order: 9,
+                  section: "Values",
+                },
+
+
             }
 
 
@@ -185,8 +228,8 @@ console.log(queryResponse, "queryResponse")
          }
         #chartdiv {
           width: 490px;
-         height: 300px;
-
+         height: 500px;
+         margin-top: -100px;
 
         overflow: visible;
 
@@ -195,13 +238,43 @@ console.log(queryResponse, "queryResponse")
 
               #vis {
           height: 100%;
-          width: calc(100% - 20px);
+          width: 100%;
           margin-top: 0px;
           border: none;
           display: flex;
           justify-content: center;
+          position:relative
          }
 
+         .dFlex{
+           display:flex;
+           flex-direction:column;
+           align-items:center;
+           justify-content:center;
+         }
+
+         .dFlex p {
+           margin:0 !important
+         }
+
+         p.textSize1{
+           font-size:${config.textSize || "50px"};
+
+           line-height:1
+         }
+
+         p.textSize2{
+           font-size:${config.textSize2 || "30px"};
+
+         }
+         .abso {
+            position: absolute;
+            top: 208px;
+            right: 327px;
+        }
+        foreignObject{
+          overflow: visible;
+        }
 
 
       </style>
@@ -218,13 +291,13 @@ element.append(visContainer)
 
 
 
+$('#vis').append(`<div class="abso"><p>${config.rightValue} ${config.rightLabel}</p></div>`);
+
+
 var thisMax =  `${config.maxNumber}`
 
 var needle = `${config.needleNumber}`
 
-
-
-console.log(needle/ thisMax )
 
 am4core.useTheme(am4themes_animated);
 am4core.addLicense("ch-custom-attribution");
@@ -261,7 +334,7 @@ am4core.addLicense("ch-custom-attribution");
   minLabel.fill = config.needle ? config.needle[0] :'#779D9B'
   minLabel.fontWeight = 900;
   // Position the label at the bottom left
-  minLabel.x = axis.renderer.gridContainer.pixelWidth - 210; // Adjust the x position as needed
+  minLabel.x = axis.renderer.gridContainer.pixelWidth - 205; // Adjust the x position as needed
   minLabel.y = axis.renderer.gridContainer.pixelHeight + 5; // Adjust the y position as needed
   minLabel.horizontalCenter = "left";
   minLabel.verticalCenter = "bottom";
@@ -276,6 +349,10 @@ am4core.addLicense("ch-custom-attribution");
   maxLabel.y = axis.renderer.gridContainer.pixelHeight + 5; // Adjust the y position as needed
   maxLabel.horizontalCenter = "right";
   maxLabel.verticalCenter = "bottom";
+
+
+
+
 
 
   var colorSet = new am4core.ColorSet();
@@ -358,22 +435,28 @@ am4core.addLicense("ch-custom-attribution");
 
   var label = chart.radarContainer.createChild(am4core.Label);
   label.isMeasured = true;
-  label.fontSize = config.textSize ? config.textSize :  40;
+  // label.fontSize = config.textSize ? config.textSize :  40;
   label.x = am4core.percent(50);
   label.y = am4core.percent(100);
   label.horizontalCenter = "middle";
   label.verticalCenter = -100;
   // label.text = Number(needle)
 
+  //
+  // // Create the first label
+  // var label1 = chart.chartContainer.createChild(am4core.Label);
+  // label1.html = `<div class="abso"><p>hi</p></div>`;
+  // label1.x = axis.renderer.gridContainer.pixelWidth + 205; // Adjust the x position as needed
+  // label1.y = axis.renderer.gridContainer.pixelHeight - 50; // Adjust the y position as needed
 
 
 
-
-
-  hand.events.on("propertychanged", function(ev) {
+    hand.events.on("propertychanged", function(ev) {
     range0.endValue = ev.target.value;
     range1.value = ev.target.value;
-    label.text =  `${config.centerValue} ${config.centerLabel}`;
+    // label.html = true; // Enable rich text
+    label.html = `<div class="dFlex"><p class="textSize1">${config.centerValue}</p><p class="textSize2">${config.centerLabel}</p></div>`,
+
 
     axis2.invalidate();
   });
