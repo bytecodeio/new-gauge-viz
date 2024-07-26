@@ -166,14 +166,14 @@ looker.plugins.visualizations.add({
 
                 side: {
                   type: "boolean",
-                  label: "Show Right Side Text",
+                  label: "Show Top Text",
                   default: false,
                   order: 7,
                   section: "Values",
                 },
 
                 rightValue: {
-                  label: "Choose Right Value",
+                  label: "Choose Top Value",
                   type: "string",
                   display: "select",
                   default: "",
@@ -184,7 +184,7 @@ looker.plugins.visualizations.add({
                 },
 
                 rightLabel: {
-                  label: "Choose Right Label",
+                  label: "Choose Top Label",
                   type: "string",
                   display: "select",
                   default: "",
@@ -236,7 +236,7 @@ console.log(queryResponse, "queryResponse")
 
           }
 
-              #vis {
+         #vis {
           height: 100%;
           width: 100%;
           margin-top: 0px;
@@ -269,8 +269,8 @@ console.log(queryResponse, "queryResponse")
          }
          .abso {
             position: absolute;
-            top: 208px;
-            right: calc(50% - 400px);
+            top:0;
+
             display:${config.side ? "block" : "none"}
 
         }
@@ -448,9 +448,14 @@ am4core.addLicense("ch-custom-attribution");
   //
   // // Create the first label
   // var label1 = chart.chartContainer.createChild(am4core.Label);
-  // label1.html = `<div class="abso"><p>hi</p></div>`;
-  // label1.x = axis.renderer.gridContainer.pixelWidth + 205; // Adjust the x position as needed
-  // label1.y = axis.renderer.gridContainer.pixelHeight - 50; // Adjust the y position as needed
+  // label1.html = `<div><p>${config.rightValue} ${config.rightLabel}</p></div>`;
+  // label1.x = 400;
+  // label1.y = -200;
+  // // label1.x = axis.renderer.gridContainer.pixelWidth + 205;
+
+
+
+
 
 
 
